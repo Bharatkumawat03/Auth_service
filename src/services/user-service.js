@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const UserRepository = require('../repository/user-repository');
 const {JWT_KEY} = require('../config/serverConfig');
-const AppErrors = require('../utils/errror-handler');
+const AppErrors = require('../utils/error-handler');
 
 class UserService {
     constructor() {
@@ -38,6 +38,9 @@ class UserService {
             const newJWT = this.createToken({email: user.email, id: user.id});
             return newJWT;
         } catch (error) {
+            if(error.name == 'AttributeNotFound'){
+                throw(error);
+            }
             console.log("Somthing went wrong in the sign in process");
             throw(error);
         }
